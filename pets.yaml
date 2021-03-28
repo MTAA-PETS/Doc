@@ -1,0 +1,352 @@
+swagger: "2.0"
+info:
+  description: "API for app PETS (MTAA). Lucia Mandová, Martin Opatovský"
+  version: "1.0.0"
+  title: "PETS app"
+host: "pets.swagger.io"
+basePath: "/v2"
+tags:
+- name: "user"
+  description: "Operations with user"
+- name: "pet"
+  description: "Operations with pets"
+- name: "invoice"
+  description: "Operations with invoices"
+
+schemes:
+- "https"
+- "http"
+paths:
+  /user/:
+    get:
+      tags:
+      - "user"
+      summary: "Returns current user"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Success"
+          
+  /user/signup/:
+    post:
+      tags:
+      - "user"
+      summary: "Creates a new user"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User object created"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        "201":
+          description: "Created"
+        "405":
+          description: "Invalid input"
+  
+  /user/login/:
+    post:
+      tags:
+      - "user"
+      summary: "Sign in to the system"
+      description: "This action is possible only with registered user"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "nick"
+        in: "query"
+        description: "Nick or email for logging in"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "User´s password"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Succesfull"
+        "401":
+          description: "Not authorised"
+
+          
+  /user/logout/:
+    post:
+      tags:
+      - "user"
+      summary: "Logs out current user"
+      description: "This requires logged user"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Succesfull"
+        "401":
+          description: "Not authorised"
+   
+  /user/addInvoice/:
+    put:
+      tags:
+      - "user"
+      summary: "Puts id of invoice to users profile"
+      description: "This requires logged user"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Succesfully updated"
+        "400":
+          description: "Invalid ID" 
+  
+  /pets/:
+    get:
+      tags:
+      - "pet"
+      summary: "Returns all species"
+      description: "This requires logged user"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Uspesne najdene" 
+  
+  /pets/search/:
+    get:
+      tags:
+      - "pet"
+      summary: "Filters pets"
+      description: "This requires logged user"
+      produces:
+      - "application/json"
+      parameters: 
+      - name: "species"
+        in: "query"
+        description: "Species"
+        required: false
+        type: "string"
+      - name: "kind"
+        in: "query"
+        description: "Kind"
+        required: false
+        type: "string"
+      - name: "age"
+        in: "query"
+        description: "Age"
+        required: false
+        type: "string"
+      - name: "price"
+        in: "query"
+        description: "Price"
+        required: false
+        type: "string"
+      responses:
+        "200":
+          description: "Succesfull"    
+          
+  /pets/addFond/:
+    put:
+      tags:
+      - "pet"
+      summary: "Adds fond"
+      description: "This requires logged user"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Succesfully updated"
+          
+  /pets/addImages/:
+    put:
+      tags:
+      - "pet"
+      summary: "Adds paths to images"
+      description: "This requires logged user"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Succesfull"
+  
+  /pets/delete/:
+    delete:
+      tags:
+      - "pet"
+      summary: "Deletes adopted pet"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Succesfull"
+        "404":
+          description: "Not found"
+          
+          
+  /invoice:
+    post:
+      tags:
+      - "invoice"
+      summary: "Creates new invoice"
+      description: "This requires logged user"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created invoice"
+        required: true
+        schema:
+          $ref: "#/definitions/Invoice"
+      responses:
+        "201":
+          description: "Created"
+        "405":
+          description: "Invalid input"
+          
+definitions:
+  Pet:
+    type: "object"
+    required:
+    - "id"
+    - "id_user"
+    - "fond"
+    - "id_details"
+    - "imgs"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: "001"
+      id_user:
+        type: "integer"
+        format: "int64"
+        example: "100"
+      fond:
+        type: "number"
+        example: "10.05"
+      id_details:
+        type: "integer"
+        format: "int64"
+        example: "300"
+      imgs:
+        type: "array"
+        items:
+          type: "string"
+  Details:
+    type: "object"
+    required:
+    - "id"
+    - "species"
+    - "kind"
+    - "breed"
+    - "age"
+    - "weight"
+    - "food"
+    - "info"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: "300"
+      species:
+        type: "string"
+        example: "cicavec"
+      kind:
+        type: "string"
+        example: "macka"
+      breed:
+        type: "string"
+        format: "int64"
+        example: "ruska macka"
+      name:
+        type: "string"
+        example: "Kitty"
+      age:
+        type: "integer"
+        format: "int64"
+        example: "2"
+      weight:
+        type: "number"
+        example: "1.5"
+      food: 
+        type: "string"
+        example: "masozravec"
+      info:
+        type : "string"
+        example: "Krasna macka z Ruska s modrymi ocami."
+      price:
+        type: "integer"
+        format: "int64"
+        example: "70"
+  User:
+    type : "object"
+    required:
+    - "id"
+    - "nick"
+    - "email"
+    - "birth"
+    - "password"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: "100"
+      nick:
+        type: "string"
+        example: "juan"
+      email:
+        type: "string"
+        example: "juan.carlos@gmail.com"
+      birth: 
+        type: "string"
+        example: "1980-10-05"
+      password:
+        type: "string"
+        example: "carlito11"
+      id_invoice:
+        type: "array"
+        items:
+          type: "integer"
+  Invoice:
+    type: "object"
+    required:
+    - "id"
+    - "id_pet"
+    - "id_user"
+    - "date"
+    - "amount"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: "400"
+      id_pet:
+        type: "integer"
+        format: "int64"
+        example: "001"
+      id_user:
+        type: "integer"
+        format: "int64"
+        example: "300"
+      date:
+        type: "string"
+        example: "2021-04-03"
+      amount:
+        type: "number"
+        example: "70.2"
+        
+     
+      
+      
+      
+    
+  
