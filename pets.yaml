@@ -17,14 +17,19 @@ schemes:
 - "https"
 - "http"
 paths:
-  /user/:
+  /user/{id}/:
     get:
       tags:
       - "user"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of user to return"
+        required: true
+        type: "integer"
       summary: "Returns current user"
       produces:
       - "application/json"
-      parameters: []
       responses:
         "200":
           description: "Success"
@@ -104,6 +109,39 @@ paths:
           description: "Succesfully updated"
         "400":
           description: "Invalid ID" 
+          
+  /user/addImage/:
+    put:
+      tags:
+      - "user"
+      summary: "Puts to image users profile"
+      description: "This requires logged user"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Succesfully updated"
+        "400":
+          description: "Invalid ID" 
+  
+  /user/getImage/{id}/:
+    get:
+      tags:
+      - "user"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of user"
+        required: true
+        type: "integer"
+      summary: "Returns image of specified user"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Success"        
+  
   
   /pets/:
     get:
@@ -151,23 +189,34 @@ paths:
         "200":
           description: "Succesfull"    
           
-  /pets/addFond/:
+  /pets/addFond/{id}:
     put:
       tags:
       - "pet"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of pet where the fond will be put"
+        required: true
+        type: "integer"
       summary: "Adds fond"
       description: "This requires logged user"
       produces:
       - "application/json"
-      parameters: []
       responses:
         "200":
           description: "Succesfully updated"
           
-  /pets/addImages/:
+  /pets/fond/{name}:
     put:
       tags:
       - "pet"
+      parameters:
+      - name: "name"
+        in: "path"
+        description: "Name of pet of which we want the fond"
+        required: true
+        type: "string"
       summary: "Adds paths to images"
       description: "This requires logged user"
       produces:
@@ -220,7 +269,6 @@ definitions:
     - "id_user"
     - "fond"
     - "id_details"
-    - "imgs"
     properties:
       id:
         type: "integer"
@@ -237,10 +285,6 @@ definitions:
         type: "integer"
         format: "int64"
         example: "300"
-      imgs:
-        type: "array"
-        items:
-          type: "string"
   Details:
     type: "object"
     required:
@@ -252,6 +296,7 @@ definitions:
     - "weight"
     - "food"
     - "info"
+    - "price"
     properties:
       id:
         type: "integer"
@@ -316,12 +361,15 @@ definitions:
         type: "array"
         items:
           type: "integer"
+      image:
+        type: "string"
   Invoice:
     type: "object"
     required:
     - "id"
     - "id_pet"
     - "id_user"
+    - "petname"
     - "date"
     - "amount"
     properties:
@@ -333,6 +381,9 @@ definitions:
         type: "integer"
         format: "int64"
         example: "001"
+      pet_name:
+        type: "string"
+        example: "Jašterica krátkohlavá"
       id_user:
         type: "integer"
         format: "int64"
@@ -343,10 +394,3 @@ definitions:
       amount:
         type: "number"
         example: "70.2"
-        
-     
-      
-      
-      
-    
-  
