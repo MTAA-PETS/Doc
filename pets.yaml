@@ -208,7 +208,7 @@ paths:
           description: "Succesfully updated"
           
   /pets/fond/{name}:
-    put:
+    get:
       tags:
       - "pet"
       parameters:
@@ -217,7 +217,7 @@ paths:
         description: "Name of pet of which we want the fond"
         required: true
         type: "string"
-      summary: "Adds paths to images"
+      summary: "Gets fond of pet"
       description: "This requires logged user"
       produces:
       - "application/json"
@@ -232,7 +232,13 @@ paths:
       summary: "Deletes adopted pet"
       produces:
       - "application/json"
-      parameters: []
+      parameters: 
+      - in: "body"
+        name: "id"
+        description: "id of pet to be deleted"
+        required: true
+        schema:
+          $ref: "#/definitions/Pet"
       responses:
         "200":
           description: "Succesfull"
@@ -394,3 +400,10 @@ definitions:
       amount:
         type: "number"
         example: "70.2"
+        
+     
+      
+      
+      
+    
+  
